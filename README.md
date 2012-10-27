@@ -15,7 +15,7 @@ Node processes running on the same box.  Think of it as a _synchronized_ block i
 
 Here's how you can use it to obtain and release a lock:
 
-    var LockManager = require('cluster-lock').LockManager;
+    var LockManager = require('hurt-locker').LockManager;
     .
     .
     .
@@ -23,7 +23,7 @@ Here's how you can use it to obtain and release a lock:
 
     // Ask for a lock called 'my-lock'.  Supply an owner object and a timeout of one second.  If we don't get the lock
     // in the timeout period, we'll get an error.
-    var lockResult = lockManager.obtainLock('my-lock', {name: 'bob'}, 1000);
+    var lockResult = lockManager.obtainExclusiveLock('my-lock', {name: 'bob'}, 1000);
 
     // Now wait for the lock.
     lockResult.when(function(err, lockName, owner, elapsedTimeMillis)
@@ -41,7 +41,7 @@ Here's how you can use it to obtain and release a lock:
         // Do something in the critical section, like drink tea or eat cucumber sandwiches or something.
 
         // Unlock.
-        var releaseResult = lockManager.releaseLock(lockName, owner);
+        var releaseResult = lockManager.releaseExclusiveLock(lockName, owner);
         releaseResult.when(function(err, lockName, owner)
         {
             // err -> undefined if the release worked.  An error if not.
@@ -78,33 +78,57 @@ are sensible and release the lock you're waiting for, you'll get it.  Eventually
 Configuration
 -------------
 
-The lock manager exposes some setters and getters to allow configuration.  Here's the rundown:
+The lock manager uses a config object to allow configuration.  Here's the rundown:
 
-    var LockManager = require('cluster-lock').LockManager;
-    .
-    .
-    .
+    // Get the config module
+    var lmConfig = require('hurt-locker').config;
+
+createDefaultConfig()
+---------------------
+
+This method creates the default config object.  So:
+
+    var config = lmConfig.createDefaultConfig();
+
+generates an object that looks like this:
+
+    {
+        lockDir: './locks',
+        lockFileSuffix: '.lock',
+        lockRetryTimeMillis: 100
+    }
+
+lockDir: The directory in which the lock files should be written.
+lockFileSuffix: The file extension to use for each lock file.
+lockRetryTimeMillis: The amount of time to wait between successive lock retry attempts.
+
+This:
+
     var lockManager = new LockManager();
 
-    // Lock directory.  Default is ./locks
-    lockManager.setLockDir(<your lock directory>); // Sets the location on the filesystem of the lock file directory.
-    var lockDir = lockManager.getLockDir();        // Gives the location of the lock directory.
+is the equivalent of this:
 
-    // Lock file suffix.  Default is .lock
-    lockmanager.setLockFileSuffix(<your suffix>);  // Sets the lock file suffix.  You can use this to delineate the
-                                                   // locks written by different lock managers in the same lock directory.
-    var lockFileSuffix = lockManager.getLockFileSuffix();  // Gives the current lock file suffix.
+    var lockManager = new LockManager(lmConfig.createDefaultConfig());
 
+Customizing Config
+------------------
 
-    // Lock retry time.  Default is 100ms.
-    lockManager.setLockRetryTimeMillis(<your retry time>);   // The amount of time to wait between successive lock retry
-                                                             // attempts.
-    var retryTime = lockManager.getLockRetryTimeMillis();    // Gives the current lock retry time.
-    this.setLockDir(path.normalize('./locks'));
+The LockManager always uses a default configuration and overlays supplied configuration information.  You can customize
+the LockManager configuration by sparsely populating a JSON object upon construction:
 
-LockManager will create the directory it needs lazily.  You should make sure your Node process has rights to be able to
-read and write to and from the place where the lock directory will live.
+    var lmConfig = require('hurt-locker').config;
+    var LockManager = require('hurt-locker').LockManager;
 
+    var lockManager = new LockManager({
+        lockRetryTimeMillis: 1000
+    });
+
+You can, of course, just construct a LockManager and then tweak its settings:
+
+    lockManager.settings.lockDir = './another-lock-dir';
+
+Just be sure not to do that while the lock manager is being used.  Bad things will happen then.  They'll probably
+involve dragons.
 
 Known Issues
 ============
