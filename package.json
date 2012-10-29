@@ -1,5 +1,5 @@
 {
-    "name":"dynamic-module-loader",
+    "name":"hurt-locker",
     "version":"1.0.0",
     "scripts":{
         "test":"node_modules/mocha/bin/_mocha test/*_test.js --ignore-leaks -t 20000 --reporter spec",
