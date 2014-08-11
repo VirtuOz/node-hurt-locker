@@ -130,6 +130,17 @@ You can, of course, just construct a LockManager and then tweak its settings:
 Just be sure not to do that while the lock manager is being used.  Bad things will happen then.  They'll probably
 involve dragons.
 
+Logging
+-------
+
+By default, the LockManager will create a new Winston instance, but you can set the logger you want to use instead:
+```javascript
+  var lockManager = new LockManager(undefined, require('winston'));
+```
+This will permit you to use for example the same winston instance than your app is already using, or even to use
+an other logger than winston. The only constrain is that the object you pass in paramater has the
+`info()` and `debug()` functions defined.
+
 Known Issues
 ============
 
