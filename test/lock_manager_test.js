@@ -21,14 +21,11 @@
  * @created 2012/08/29
  */
 var expect = require('chai').expect;
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
-var wrench = require('wrench');
 
 var LockManager = require('../index.js').LockManager;
 var config = require('../index.js').config;
-var _ = require('underscore');
-_.str = require('underscore.string');
 
 describe('LockManager', function ()
 {
@@ -42,9 +39,9 @@ describe('LockManager', function ()
                    // Get rid of the temp directory before we start the test.
                    if (fs.existsSync(tmpDir))
                    {
-                       wrench.rmdirSyncRecursive(tmpDir, true);
+                       fs.removeSync(tmpDir);
                    }
-                   wrench.mkdirSyncRecursive(tmpDir);
+                   fs.mkdirsSync(tmpDir);
 
                    // Create the module loader to be tested.
                    lockManager = new LockManager();

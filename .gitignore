@@ -14,8 +14,7 @@ results
 node_modules
 npm-debug.log
 
-.idea/workspace.xml
-.idea/libraries
+.idea
 
 target
 

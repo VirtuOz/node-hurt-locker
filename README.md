@@ -14,7 +14,7 @@ This library allows you to do that but only on a single machine.  It's compatibl
 Node processes running on the same box.  Think of it as a _synchronized_ block in Java or a _lock_ block in C#.
 
 Here's how you can use it to obtain and release a lock:
-
+```javascript
     var LockManager = require('hurt-locker').LockManager;
     .
     .
@@ -54,6 +54,7 @@ Here's how you can use it to obtain and release a lock:
             }
         });
     });
+```
 
 The lock semantics are pretty straight forward: You either get the lock in the supplied timeout period or you don't.
 The 'owner' object is an arbitrary object.  It can have any format, be anything at all (well, anything that can be
@@ -79,53 +80,60 @@ Configuration
 -------------
 
 The lock manager uses a config object to allow configuration.  Here's the rundown:
-
+```javascript
     // Get the config module
     var lmConfig = require('hurt-locker').config;
+```
 
 createDefaultConfig()
 ---------------------
 
 This method creates the default config object.  So:
-
+```javascript
     var config = lmConfig.createDefaultConfig();
+```
 
 generates an object that looks like this:
-
+```javascript
     {
         lockDir: './locks',
         lockFileSuffix: '.lock',
         lockRetryTimeMillis: 100
     }
+```
 
 lockDir: The directory in which the lock files should be written.
 lockFileSuffix: The file extension to use for each lock file.
 lockRetryTimeMillis: The amount of time to wait between successive lock retry attempts.
 
 This:
-
+```javascript
     var lockManager = new LockManager();
+```
 
 is the equivalent of this:
-
+```javascript
     var lockManager = new LockManager(lmConfig.createDefaultConfig());
+```
 
 Customizing Config
 ------------------
 
 The LockManager always uses a default configuration and overlays supplied configuration information.  You can customize
 the LockManager configuration by sparsely populating a JSON object upon construction:
-
+```javascript
     var lmConfig = require('hurt-locker').config;
     var LockManager = require('hurt-locker').LockManager;
 
     var lockManager = new LockManager({
         lockRetryTimeMillis: 1000
     });
+```
 
 You can, of course, just construct a LockManager and then tweak its settings:
-
+```javascript
     lockManager.settings.lockDir = './another-lock-dir';
+```
 
 Just be sure not to do that while the lock manager is being used.  Bad things will happen then.  They'll probably
 involve dragons.
