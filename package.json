@@ -1,33 +1,33 @@
 {
-    "name":"hurt-locker",
-    "version":"1.3.0",
-    "homepage":"https://github.com/VirtuOz/node-hurt-locker",
-    "author":{
-    		"name":"Kevan Dunsmore",
-    		"email":"kdunsmore@virtuoz.com"
-    	},
+    "name": "hurt-locker",
+    "version": "1.3.0",
+    "homepage": "https://github.com/VirtuOz/node-hurt-locker",
+    "author": {
+        "name": "Kevan Dunsmore",
+        "email": "kdunsmore@virtuoz.com"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/VirtuOz/node-hurt-locker"
     },
     "license": "Apache-2.0",
-    "scripts":{
-        "test":"node_modules/mocha/bin/_mocha test/*_test.js --ignore-leaks -t 20000 --reporter spec",
-        "test-jenkins":"node_modules/mocha/bin/_mocha test/*_test.js --ignore-leaks -t 20000 --reporter xunit-file",
-        "clean":"rm -rf target; rm -f xunit.xml"
+    "scripts": {
+        "test": "node_modules/mocha/bin/_mocha test/*_test.js --ignore-leaks -t 20000 --reporter spec",
+        "test-jenkins": "node_modules/mocha/bin/_mocha test/*_test.js --ignore-leaks -t 20000 --reporter xunit-file",
+        "clean": "rm -rf target; rm -f xunit.xml"
     },
-    "dependencies":{
-        "error-handling":"1.0.0",
+    "dependencies": {
+        "error-handling": "1.0.0",
         "futures": "^2.3.3",
         "jsclass": "^4.0.5",
         "fs-extra": "^5.0.0",
         "winston": "2.4.0"
     },
-    "devDependencies":{
+    "devDependencies": {
         "mocha": "^4.0.1",
         "chai": "^4.1.2",
         "nock": "^9.1.4",
         "xunit-file": "^1.0.0"
     },
-    "main":"./index.js"
+    "main": "./index.js"
 }
